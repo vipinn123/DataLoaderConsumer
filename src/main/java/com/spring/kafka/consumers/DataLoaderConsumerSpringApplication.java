@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.core.env.Environment;
 import org.springframework.kafka.annotation.KafkaListener;
 
@@ -16,7 +17,7 @@ import com.spring.trade.entities.ZerodhaTickMongoRepository;
 import com.zerodhatech.models.Tick;
 
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
 public class DataLoaderConsumerSpringApplication {
 	
 	private static Logger logger = LoggerFactory.getLogger(DataLoaderConsumerSpringApplication.class);
