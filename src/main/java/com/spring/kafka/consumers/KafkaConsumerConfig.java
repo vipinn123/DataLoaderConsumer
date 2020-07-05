@@ -10,18 +10,35 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.data.mongodb.MongoDatabaseFactory;
+import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.core.KafkaTemplate;
+
+import com.spring.trade.entities.ZerodhaTick;
+import com.spring.trade.entities.ZerodhaTickMongoRepository;
 
 @EnableKafka
 @Configuration
+@EnableMongoRepositories("com.spring.trade.entities")
+
 public class KafkaConsumerConfig {
 	
 	@Value("${kafka.bootstrap.host}")
-	String bootstrap_server;	
+	String bootstrap_server;
 	
+	@Value("${spring.data.mongodb.uri}")
+	String connectionString;
+	
+
+
+	 
 	@Bean
 	   public ConsumerFactory<String, String> consumerFactory() {
 	      Map<String, Object> props = new HashMap<>();
@@ -39,6 +56,7 @@ public class KafkaConsumerConfig {
 	      factory.setConcurrency(5);
 	      return factory;
 	   }
+	   
 	
 
 }

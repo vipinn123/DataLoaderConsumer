@@ -9,11 +9,20 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.env.Environment;
 import org.springframework.kafka.annotation.KafkaListener;
 
+import com.google.gson.Gson;
+import com.spring.trade.entities.ZerodhaTick;
+import com.spring.trade.entities.ZerodhaTickDepth;
+import com.spring.trade.entities.ZerodhaTickMongoRepository;
+import com.zerodhatech.models.Tick;
+
 
 @SpringBootApplication
 public class DataLoaderConsumerSpringApplication {
 	
 	private static Logger logger = LoggerFactory.getLogger(DataLoaderConsumerSpringApplication.class);
+	
+	@Autowired
+	private ZerodhaTickMongoRepository zerodhaTickMongoRepository;
 	
 
 	
@@ -26,13 +35,40 @@ public class DataLoaderConsumerSpringApplication {
 	
 
 	
-	@KafkaListener(topics = "${kafka.bootstrap.host}", groupId = "full-read")
+	@KafkaListener(topics = "${TICK_DATA_TOPIC}", groupId = "full-read")
 	public void listen(String message) {
 		
 		logger.info("Received Messasge in group - full-read: " + message);
 		
-		//System.out.println(message);
-	
+		
+		try {
+			
+			
+			ZerodhaTick zerodhaTick = new Gson().fromJson(message, ZerodhaTick.class);
+			
+			logger.info("Ticker data Average Trade Price:" + zerodhaTick.getLastTradedPrice());
+			
+			ZerodhaTickDepth depth = zerodhaTick.getDepth().get("buy").get(0);
+			
+			if(depth != null) {
+				zerodhaTick.computeDepthStats();
+				
+				
+			}
+			
+			zerodhaTickMongoRepository.save(zerodhaTick);
+			String zerodhaTickJson = new Gson().toJson(zerodhaTick, ZerodhaTick.class);
+			
+			
+			
+			logger.info("Ticker data Detail converted to JSON:" + zerodhaTickJson);
+			
+			
+			
+		}catch(Exception ex) {
+			logger.info(ex.toString());
+		}
+		
 	}
 	
 	

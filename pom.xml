@@ -31,6 +31,11 @@
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>mysql</groupId>
@@ -47,6 +52,12 @@
 					<artifactId>junit-vintage-engine</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.zerodhatech.kiteconnect/kiteconnect -->
+		<dependency>
+		    <groupId>com.zerodhatech.kiteconnect</groupId>
+		    <artifactId>kiteconnect</artifactId>
+		    <version>3.1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>
